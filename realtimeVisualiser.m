@@ -1,5 +1,6 @@
-% Create audio buffer stream
+% Global Parameters
 frameLength = 1024;
+downSampleFactor = 4;
 
 % Input File Reader
 fileReader = dsp.AudioFileReader( ...
@@ -11,26 +12,8 @@ deviceWriter = audioDeviceWriter( ...
 
 % Create Visualisation object -------------------------------
 
-% TIMESCOPE
-scope = timescope( ...
-    'SampleRate',fileReader.SampleRate, ...
-    'TimeSpan',2, ...
-    'BufferLength',fileReader.SampleRate*2*2, ...
-    'YLimits',[-1,1], ...
-    'TimeSpanOverrunAction',"Scroll");
-
 % CUSTOM VISUALISER
-downSampleFactor = 4;
-figure(1);
-axis([0 frameLength/(downSampleFactor*2) -1 1 -1 1]);
-axis vis3d;
-orbit = 0;
-xticks(0:0.1:1);
-yticks(0:0.1:1);
-zticks(0:0.1:1);
-grid on;
-
-% Create processing chain
+barPlotFig = VisualiserPlot(frameLength, downSampleFactor);
 
 % REAL-TIME ROUTING
 frame = 1;
@@ -54,33 +37,11 @@ while ~isDone(fileReader)
     
         %% %%
         % VISUALISER
-        figure(1);
-        
-        %plot3(linspace(0, frameLength/downSampleFactor, frameLength/downSampleFactor)', zeros(frameLength/downSampleFactor,1), plotSignal);
-        %hold on;
-        %plot3(linspace(0, frameLength/(downSampleFactor*2), frameLength/(downSampleFactor*2))',signalFFT, zeros(frameLength/(downSampleFactor*2),1));
-        bar(linspace(0, frameLength/(downSampleFactor*2),frameLength/(downSampleFactor*2))', signalFFT);
-        %plot3(linspace(0, frameLength, frameLength)', signalFFT, signal(:,2));
-        
-        %plot3(linspace(0, frameLength, frameLength)', zeros(frameLength,1), signal(:,2));
-        %hold off;
-    
-        %orbit = orbit + 0.5;
-        %camorbit(orbit,0);
-        
-        grid on;
-        xticks(0:frameLength/(downSampleFactor*8):frameLength/downSampleFactor);
-        yticks(-1:0.4:1);
-        %zticks(-1:0.4:1);
-        axis([0 frameLength/(downSampleFactor*2) 0 1]);
-        drawnow;
+        barPlotFig.barPlot2(signalFFT);
     end
-    %scope([signal,mean(reverbSignal,2)])
     frame = frame + 1;
 end
 
 % EXIT
 release(fileReader)
 release(deviceWriter)
-release(reverb)
-release(scope)
