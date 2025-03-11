@@ -1,11 +1,21 @@
+close all;
+
 % Global Parameters
-frameLength = 1024;
-downSampleFactor = 4;
+frameLength = 2048;
+downSampleFactor = 8;
+frameSkip = 2;
+
+% Input File
+filePath = './TestAudio/Nitepunk-MTV.wav';
+%filePath = "./TestAudio/1kHz.wav";
 
 % Input File Reader
 fileReader = dsp.AudioFileReader( ...
-    'test.mp3', ...
+    filePath, ...
     'SamplesPerFrame',frameLength); % Reads frame length of audio each frame
+
+sampleRate = fileReader.SampleRate;
+
 % Soundcard Output Writer
 deviceWriter = audioDeviceWriter( ...
     'SampleRate',fileReader.SampleRate);
@@ -13,7 +23,10 @@ deviceWriter = audioDeviceWriter( ...
 % Create Visualisation object -------------------------------
 
 % CUSTOM VISUALISER
-barPlotFig = VisualiserPlot(frameLength, downSampleFactor);
+barPlotFig = VisualiserPlot(sampleRate, frameLength, downSampleFactor);
+
+% SIGNAL PROCESSOR
+processor = SignalProcessing(frameLength, downSampleFactor);
 
 % REAL-TIME ROUTING
 frame = 1;
@@ -25,19 +38,16 @@ while ~isDone(fileReader)
     deviceWriter(signal);
 
     %% PROCESSING %%
-    %signalFFT = fft(signal(:,2), frameLength);
-    %signalFFT = abs(signalFFT)/max(abs(signalFFT));
 
-    if (mod(frame,4)==0)
-        % Downsample Plot 
-        plotSignal = downsample(signal(:,1), downSampleFactor);
-        signalFFT = fft(plotSignal, frameLength/downSampleFactor);
-        signalFFT = signalFFT(1:frameLength/(downSampleFactor*2));
-        signalFFT = abs(signalFFT)/max(abs(signalFFT));
+    if (mod(frame,frameSkip)==0)
+        % Processing
+        plotSignal = processor.downsample(signal(:,1));
+        signalFFT = processor.fft(plotSignal);
     
         %% %%
         % VISUALISER
-        barPlotFig.barPlot2(signalFFT);
+        %barPlotFig = barPlotFig.linePlot3(plotSignal);
+        barPlotFig = barPlotFig.linePlot2fdBl(signalFFT);
     end
     frame = frame + 1;
 end
