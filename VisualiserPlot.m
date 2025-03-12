@@ -117,6 +117,35 @@ classdef VisualiserPlot
         
         end
 
+        function obj = linePlot3fdBl(obj, signal)
+            % Frequency Axis
+            nyquist = (obj.sampleRate/2);
+            freqRes = (nyquist/obj.downsampleFactor) / (obj.frameLength/obj.downsampleFactor);
+            freqAxis = linspace(freqRes, nyquist/obj.downsampleFactor, length(signal))';
+
+            signal = 20*log10(signal);
+
+            plot3(freqAxis, zeros(length(freqAxis)), signal, "Marker","o", "LineStyle","none", "MarkerEdgeColor",'r');
+
+            % Set the x-axis to logarithmic scale
+            set(gca, 'XScale', 'log');
+
+            grid on;
+            xticks([10 50 100 200 500 1000 2000 5000 10000 20000]);
+            yticks(-1:0.4:1);
+            zticks(-120:6:6);
+            
+            axis([10 nyquist/obj.downsampleFactor -1 1 -60 3]);
+
+            
+
+            obj.orbit = obj.orbit + 0.5;
+            camorbit(obj.orbit,0);
+
+            drawnow;
+        
+        end
+
         function obj = linePlot3(obj, signal)
             plot3(linspace(0, obj.frameLength/obj.downsampleFactor, obj.frameLength/obj.downsampleFactor)', zeros(obj.frameLength/obj.downsampleFactor,1), signal);
             %hold on;

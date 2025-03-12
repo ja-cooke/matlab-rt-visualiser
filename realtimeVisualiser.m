@@ -1,12 +1,12 @@
 close all;
 
 % Global Parameters
-frameLength = 2048;
-downSampleFactor = 8;
+frameLength = 4096;
+downSampleFactor = 32;
 frameSkip = 2;
 
 % Input File
-filePath = './TestAudio/Nitepunk-MTV.wav';
+filePath = './TestAudio/LEMONADE.wav';
 %filePath = "./TestAudio/1kHz.wav";
 
 % Input File Reader
@@ -47,7 +47,7 @@ while ~isDone(fileReader)
         %% %%
         % VISUALISER
         %barPlotFig = barPlotFig.linePlot3(plotSignal);
-        barPlotFig = barPlotFig.linePlot2fdBl(signalFFT);
+        barPlotFig = barPlotFig.linePlot3fdBl(signalFFT);
     end
     frame = frame + 1;
 end

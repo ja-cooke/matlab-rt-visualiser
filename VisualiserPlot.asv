@@ -81,17 +81,67 @@ classdef VisualiserPlot
             freqRes = (nyquist/obj.downsampleFactor) / (obj.frameLength/obj.downsampleFactor);
             freqAxis = linspace(freqRes, nyquist/obj.downsampleFactor, length(signal))';
 
-            signal = 20*log(signal);
+            signal = 20*log10(signal);
 
-            bar(freqAxis, signal, style);
+            bar(freqAxis, signal, "BaseValue",-100);
 
             % Set the x-axis to logarithmic scale
             set(gca, 'XScale', 'log');
 
             grid on;
             xticks([10 50 100 200 500 1000 2000 5000 10000 20000]);
-            yticks(-100:10:0);
-            axis([10 nyquist/obj.downsampleFactor -100 1]);
+            yticks(-120:6:6);
+            axis([10 nyquist/obj.downsampleFactor -60 3]);
+            drawnow;
+        
+        end
+
+        function obj = linePlot2fdBl(obj, signal)
+            % Frequency Axis
+            nyquist = (obj.sampleRate/2);
+            freqRes = (nyquist/obj.downsampleFactor) / (obj.frameLength/obj.downsampleFactor);
+            freqAxis = linspace(freqRes, nyquist/obj.downsampleFactor, length(signal))';
+
+            signal = 20*log10(signal);
+
+            plot(freqAxis, signal, "Marker","o", "LineStyle","none", "MarkerEdgeColor",'r');
+
+            % Set the x-axis to logarithmic scale
+            set(gca, 'XScale', 'log');
+
+            grid on;
+            xticks([10 50 100 200 500 1000 2000 5000 10000 20000]);
+            yticks(-120:6:6);
+            axis([10 nyquist/obj.downsampleFactor -60 3]);
+            drawnow;
+        
+        end
+
+        function obj = linePlot3fdBl(obj, signal)
+            % Frequency Axis
+            nyquist = (obj.sampleRate/2);
+            freqRes = (nyquist/obj.downsampleFactor) / (obj.frameLength/obj.downsampleFactor);
+            freqAxis = linspace(freqRes, nyquist/obj.downsampleFactor, length(signal))';
+
+            signal = 20*log10(signal);
+
+            plot3(freqAxis, zeros(length(freqAxis)), signal, "Marker","o", "LineStyle","none", "MarkerEdgeColor",'r');
+
+            % Set the x-axis to logarithmic scale
+            set(gca, 'XScale', 'log');
+
+            grid on;
+            xticks([10 50 100 200 500 1000 2000 5000 10000 20000]);
+            yticks(-1:0.4:1);
+            zticks(-120:6:6);
+            
+            axis([10 nyquist/obj.downsampleFactor -1 1 -60 3]);
+
+            
+
+            obj.orbit = obj.orbit + 0.5;
+            camorbit(obj.orbit,0);
+
             drawnow;
         
         end
