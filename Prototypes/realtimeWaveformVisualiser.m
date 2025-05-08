@@ -1,5 +1,5 @@
 % Create audio buffer stream
-frameLength = 2048*4;
+frameLength = 1024*8;
 % Input File Reader
 fileReader = dsp.AudioFileReader( ...
     'TestAudio/test.mp3', ...

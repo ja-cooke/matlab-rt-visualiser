@@ -1,11 +1,11 @@
 close all;
 clear all;
 
-demonstrationNumber = 1;
+demonstrationNumber = 3;
 
-framesPerSecond = 15;
+frameRateTarget = 10;
 
-audioPlayer = MusicPlayer();
+audioPlayer = MusicPlayer(frameRateTarget);
 audioPlayer = audioPlayer.start();
 
 % Create Visualisation object -------------------------------
@@ -19,6 +19,7 @@ processor = SignalProcessing(audioPlayer);
 % REAL-TIME ROUTING
 frame = 1;
 timerstart = double(tic)*10^-9;
+framesPerSecond = 15;
 while ~isDone(audioPlayer.fileReader)
 
     % INPUT %

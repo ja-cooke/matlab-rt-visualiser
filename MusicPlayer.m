@@ -10,17 +10,20 @@ classdef MusicPlayer
         sampleRate
         deviceWriter
         fileReader
+        frameRateTarget
     end
     
     methods
-        function obj = MusicPlayer()
+        function obj = MusicPlayer(frameRateTarget)
             %UNTITLED Construct an instance of this class
             %   Detailed explanation goes here
             % Global Parameters
             obj.frameLength = 1024; %1024; %512
-            obj.downsampleFactor = 2; % 4
-            obj.frameSkip = 2;
-            obj.reductionFactor = 1.2;
+            obj.downsampleFactor = 1; % 4
+            obj.frameSkip = 4;
+            obj.reductionFactor = 1.01;
+            obj.frameRateTarget = frameRateTarget;
+
         end
         
         function obj = start(obj)
@@ -53,7 +56,7 @@ classdef MusicPlayer
         end
 
         function obj = optimise(obj, framesPerSecond)
-            if (framesPerSecond < 14 && obj.reductionFactor < 2)
+            if (framesPerSecond < obj.frameRateTarget && obj.reductionFactor < 2)
                 obj.reductionFactor = obj.reductionFactor + 0.01;
             elseif (obj.reductionFactor > 1.01)
                 obj.reductionFactor = obj.reductionFactor - 0.01;
