@@ -1,6 +1,6 @@
 classdef SignalProcessing
-    %SIGNALPROCESSING Summary of this class goes here
-    %   Detailed explanation goes here
+    %SIGNALPROCESSING All DSP operations contained in this class
+    %   Mostly FFTs, but also the data reduction algorithm
     
     properties
         downsampleFactor
@@ -10,7 +10,7 @@ classdef SignalProcessing
     methods
         function obj = SignalProcessing(audioPlayer)
             %SIGNALPROCESSING Construct an instance of this class
-            %   Detailed explanation goes here
+            %
             obj.frameLength = audioPlayer.frameLength;
             obj.downsampleFactor = audioPlayer.downsampleFactor;
         end
@@ -20,17 +20,19 @@ classdef SignalProcessing
         end
         
         function [outputSignal, outputPhase] = fft(obj,inputSignal)
-            %METHOD1 Summary of this method goes here
-            %   Detailed explanation goes here
+            %FFT Gets fourier transform magnitude and phase 
+            %   
+            %tic;
             signalFFT = fft(inputSignal, obj.frameLength/obj.downsampleFactor);
+            %toc;
             signalFFT = signalFFT(1:obj.frameLength/(obj.downsampleFactor*2));
             outputSignal = abs(signalFFT)/(obj.frameLength/obj.downsampleFactor);%/max(abs(signalFFT));
             outputPhase = angle(signalFFT);
         end
 
         function outputSignal = simplefft(obj,inputSignal)
-            %METHOD1 Summary of this method goes here
-            %   Detailed explanation goes here
+            %SIMPLEFFT Gets the fourier magnitudes
+            % 
             signalFFT = fft(inputSignal, obj.frameLength/obj.downsampleFactor);
             signalFFT = signalFFT(1:obj.frameLength/(obj.downsampleFactor*2));
             outputSignal = abs(signalFFT)/max(abs(signalFFT));

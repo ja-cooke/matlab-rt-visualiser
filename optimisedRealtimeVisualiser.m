@@ -1,7 +1,21 @@
+%% MATLAB Prototype 
+% of a Visualiser Engine for the Unity game engine.
+% targeting VR development on the Meta Quest 2.
+
+% Author: Jonathan Cooke
 close all;
 clear all;
 
-demonstrationNumber = 3;
+%% HOW TO USE
+% Choose an integer between -2 and 3 and hit run.
+demonstrationNumber = -2;
+
+% Project settings in the MusicPlayer class are currently calibrated for 
+% demonstration -2.
+
+% You may need to adjust the frameRateTarget or wiggle some buffer sizes to
+% get the other demonstrations to work smoothly.
+%%
 
 frameRateTarget = 10;
 

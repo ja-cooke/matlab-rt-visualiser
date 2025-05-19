@@ -1,6 +1,6 @@
 classdef VisualiserPlot
-    %VISUALISERPLOT Summary of this class goes here
-    %   Detailed explanation goes here
+    %VISUALISERPLOT This class contains all of the plotting algorithms
+    %   bar(), plot() and plot3() all used at different points.
     
     properties
         figureName
@@ -27,8 +27,8 @@ classdef VisualiserPlot
         end
         
         function obj = barPlot2(obj, signal)
-            %BARPLOT2 Summary of this method goes here
-            %   Detailed explanation goes here
+            %BARPLOT2 2D time plot using bar()
+            %   
             
             bar(linspace(0, obj.frameLength/(obj.downsampleFactor * 2), ...
                 obj.frameLength/(obj.downsampleFactor * 2))', signal);
@@ -40,7 +40,8 @@ classdef VisualiserPlot
 
             drawnow;
         end
-
+        
+        % Plots a 2D frequency spectrum using bar()
         function obj = barPlot2f(obj, signal)
             % Frequency Axis
             nyquist = (obj.sampleRate/2);
@@ -56,7 +57,8 @@ classdef VisualiserPlot
             drawnow;
         
         end
-
+           
+        % Logarithmic Frequency Plot using bar()
         function obj = barPlot2fl(obj, signal)
             % Frequency Axis
             nyquist = (obj.sampleRate/2);
@@ -75,7 +77,8 @@ classdef VisualiserPlot
             drawnow;
         
         end
-
+        
+        % Logarithmic Frequency Plot with a dB magnitude scale using bar()
         function obj = barPlot2fdBl(obj, signal)
             % Frequency Axis
             nyquist = (obj.sampleRate/2);
@@ -96,7 +99,8 @@ classdef VisualiserPlot
             drawnow;
         
         end
-
+        
+        % 2D Scatter plot logarithmic frequency dB scale magnitude
         function obj = linePlot2fdBl(obj, signal)
             % Frequency Axis
             nyquist = (obj.sampleRate/2);
@@ -117,7 +121,8 @@ classdef VisualiserPlot
             drawnow;
         
         end
-
+        
+        % 3D Scatter plot logarithmic frequency dB scale magnitude
         function obj = linePlot3fdBl(obj, signal, indices, fps)
             % Frequency Axis
             nyquist = (obj.sampleRate/2);
@@ -140,13 +145,16 @@ classdef VisualiserPlot
             zticks(-120:6:6);
             
             axis([20 nyquist/obj.downsampleFactor -1 1 -60 3]);
-
+            
+            % Automatically rotate the plot in 3D
             obj.orbit = obj.orbit + 0.5;
             camorbit(obj.orbit,0);
-
+            
+            % Frames per second readout
             fps_text = sprintf('FPS: %.2f', fps); % Format the FPS text
             text(0.1, 0.9, fps_text, 'Units', 'normalized', 'FontSize', 12, 'Color', 'red');
-
+            
+            % Number of points readout
             points_text = sprintf('Data Points: %.2f', length(indices)); % Format the FPS text
             text(0.7, 0.9, points_text, 'Units', 'normalized', 'FontSize', 12, 'Color', 'red');
             
@@ -156,7 +164,9 @@ classdef VisualiserPlot
             drawnow;
         
         end
-
+        
+        % 3D Scatter plot logarithmic frequency dB scale magnitude
+        % Plots Fourier transform phase as a waveform underneath
         function obj = linePlot3fpdBl(obj, signal, phase, indices, fps)
             % Frequency Axis
             nyquist = (obj.sampleRate/2);
@@ -199,7 +209,9 @@ classdef VisualiserPlot
             drawnow;
         
         end
-
+        
+        % 3D Scatter plot logarithmic frequency dB scale magnitude
+        % Plots time based waveform underneath
         function obj = linePlot3FA(obj, signal_f, signal_t, indices, fps)
             % Frequency Axis
             nyquist = (obj.sampleRate/2);

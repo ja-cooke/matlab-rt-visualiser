@@ -1,6 +1,5 @@
 classdef MusicPlayer
-    %UNTITLED Summary of this class goes here
-    %   Detailed explanation goes here
+    %MUSICPLAYER Responsible for reading and playing audio files
     
     properties
         frameLength
@@ -15,9 +14,9 @@ classdef MusicPlayer
     
     methods
         function obj = MusicPlayer(frameRateTarget)
-            %UNTITLED Construct an instance of this class
-            %   Detailed explanation goes here
-            % Global Parameters
+            %MUSICPLAYER Construct an instance of this class
+            %   
+            % Global Parameters -- PROJECT SETTINGS
             obj.frameLength = 1024; %1024; %512
             obj.downsampleFactor = 1; % 4
             obj.frameSkip = 4;
@@ -27,8 +26,8 @@ classdef MusicPlayer
         end
         
         function obj = start(obj)
-            %METHOD1 Summary of this method goes here
-            %   Detailed explanation goes here
+            %START Start reading audio and set up output
+            %   
             % Input File
             filePath = './TestAudio/LEMONADE.wav';
             %filePath = './TestAudio/test.mp3';
@@ -54,7 +53,8 @@ classdef MusicPlayer
         function  obj = play(obj, signal)
             obj.deviceWriter = obj.deviceWriter(signal);
         end
-
+        
+        % Chooses a reduction factor to help achieve the target frame rate
         function obj = optimise(obj, framesPerSecond)
             if (framesPerSecond < obj.frameRateTarget && obj.reductionFactor < 2)
                 obj.reductionFactor = obj.reductionFactor + 0.01;
@@ -63,7 +63,8 @@ classdef MusicPlayer
             end
         
         end
-
+        
+        % Stop playing audio and release the soundcard
         function obj = stop(obj)
             % EXIT
             release(obj.fileReader);
